@@ -15,9 +15,9 @@ export default class PermissionMiddleware {
     }
 
     /**
-     * Verify that the current user is an Admin
+     * Verify that the current user is a contributor
      */
-    public async checkIsAdmin(
+    public async checkIsContributor(
         req: Request,
         res: Response,
         next: NextFunction
@@ -31,12 +31,12 @@ export default class PermissionMiddleware {
                 throw "Failed to find user";
             }
 
-            if (user.role === UserRoles.ADMIN) {
+            if (user.role === UserRoles.CONTRIBUTOR) {
                 next();
             } else {
                 res.status(401).send({
-                    code: "UserNotAdminException",
-                    message: "The logged account is not an admin",
+                    code: "UserNotContributorException",
+                    message: "The logged account is not a contributor",
                 });
             }
         } catch (error: any) {
