@@ -1,16 +1,3 @@
-// * Recipe
-
-// user_id
-// product: id_product
-// time:
-// recipe_name:
-// recipe_text: str
-// total_calores:
-// total_protein: 
-// total_portion:
-// total_fat:
-// avg_cost:
-
 import { Schema, model, Types } from "mongoose";
 
 export interface IRecipe {
