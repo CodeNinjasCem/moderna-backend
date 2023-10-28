@@ -55,6 +55,7 @@ export const userSchema = new Schema<IUser>({
     birthdate: {
         type: Date,
         required: true,
+        default: Date.now,
     },
     date_registered: {
         type: Date,
