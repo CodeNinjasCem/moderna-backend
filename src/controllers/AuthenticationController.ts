@@ -27,6 +27,7 @@ class AuthenticationController extends AbstractController {
         this.router.post("/getUser", this.getUser.bind(this));
         this.router.post("/forgotPassword", this.forgotPassword.bind(this));
         this.router.post("/confirmForgotPassword", this.changePassword.bind(this));
+        this.router.post("/addPoints", this.addPoints.bind(this));
     }
 
     private async getUser(req: Request, res: Response) {
@@ -134,6 +135,34 @@ class AuthenticationController extends AbstractController {
                 new_password
             );
             res.status(200).send({ message: "Password was changed succesfully!" });
+        } catch (error: any) {
+            res.status(500).send({ code: error.code, message: error.message });
+        }
+    }
+
+    private async addPoints(req: Request, res: Response) {
+        const { email, points } = req.body;
+        
+        try {
+            const user: HydratedDocument<IUser> | null = await UserModel.findOne({
+                email: email,
+            });
+
+            if (!user) {
+                throw "Failed to find user";
+            }
+
+            const updated_user: HydratedDocument<IUser> | null =
+                await UserModel.findOneAndUpdate(
+                    { email: email },
+                    { points: user.points + points }
+                );
+
+            if (!updated_user) {
+                throw "Failed to update user";
+            }
+
+            res.status(200).send({ message: "Points were added succesfully!" });
         } catch (error: any) {
             res.status(500).send({ code: error.code, message: error.message });
         }
