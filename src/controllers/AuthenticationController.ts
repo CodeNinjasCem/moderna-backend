@@ -56,9 +56,9 @@ class AuthenticationController extends AbstractController {
         }
     }
     private async verify(req: Request, res: Response) {
-        const { email, verifyCode } = req.body;
+        const { email, verify_code } = req.body;
         try {
-            await this.cognitoService.verifyUser(email, verifyCode);
+            await this.cognitoService.verifyUser(email, verify_code);
             res.status(200).send({ message: "ok" });
         } catch (error: any) {
             res.status(500).send({ code: error.code, message: error.message });
@@ -66,7 +66,7 @@ class AuthenticationController extends AbstractController {
     }
 
     private async signup(req: Request, res: Response) {
-        const { email, password, name, lastName } = req.body;
+        const { email, password, first_name, last_name, gender, role } = req.body;
         try {
             // Crear el usuario de cognito
             const user = await this.cognitoService.signUpUser(email, password, [
@@ -79,10 +79,12 @@ class AuthenticationController extends AbstractController {
             const created_user: HydratedDocument<IUser> | null =
                 await this._model.create(
                     new UserModel({
-                        name: name,
-                        lastName: lastName,
+                        first_name: first_name,
+                        last_name: last_name,
                         email: email,
-                        awsCognito: user.UserSub,
+                        aws_cognito: user.UserSub,
+                        gender: gender,
+                        role: role
                     })
                 );
 
@@ -106,12 +108,12 @@ class AuthenticationController extends AbstractController {
     }
 
     private async changePassword(req: Request, res: Response) {
-        const { email, code, newPassword } = req.body;
+        const { email, code, new_password } = req.body;
         try {
             const change = await this.cognitoService.confirmForgotPassword(
                 email,
                 code,
-                newPassword
+                new_password
             );
             res.status(200).send({ message: "Password was changed succesfully!" });
         } catch (error: any) {
