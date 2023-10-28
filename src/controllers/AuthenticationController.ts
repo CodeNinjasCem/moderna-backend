@@ -58,8 +58,17 @@ class AuthenticationController extends AbstractController {
     private async verify(req: Request, res: Response) {
         const { email, verify_code } = req.body;
         try {
-            await this.cognitoService.verifyUser(email, verify_code);
-            res.status(200).send({ message: "ok" });
+            const userVerify = await this.cognitoService.verifyUser(email, verify_code);
+
+            const user: HydratedDocument<IUser> | null = await UserModel.findOne({
+                email: email,
+            });
+
+            if (!user) {
+                throw "Failed to find user";
+            }
+
+            res.status(200).send({ user: user });
         } catch (error: any) {
             res.status(500).send({ code: error.code, message: error.message });
         }
