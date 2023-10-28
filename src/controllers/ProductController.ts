@@ -27,7 +27,7 @@ class ProductController extends AbstractController {
     try{
          await this._model.create(product);
          res.status(201).send({
-          status: "Succes"
+          status: "Success"
          })
     }catch(errorMessage) {
         res.status(400).send({

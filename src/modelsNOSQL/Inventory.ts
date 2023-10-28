@@ -1,9 +1,3 @@
-// * Inventory 
-
-// user_id
-// time
-// values (when inserting a value, pass it to lowercase) []
-
 import { Schema, model, Types } from "mongoose";
 
 export interface IInventory {

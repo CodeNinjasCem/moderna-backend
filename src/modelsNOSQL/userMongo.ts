@@ -18,6 +18,9 @@ export interface IUser {
     gender: Genders;
     role: UserRoles;
     email: string;
+    birthdate: Date;
+    date_registered: Date;
+    points: number;
 };
 
 export const userSchema = new Schema<IUser>({
@@ -48,7 +51,21 @@ export const userSchema = new Schema<IUser>({
         type: String,
         required: true,
         unique: true,
-    }
+    },
+    birthdate: {
+        type: Date,
+        required: true,
+    },
+    date_registered: {
+        type: Date,
+        required: true,
+        default: Date.now,
+    },
+    points: {
+        type: Number,
+        required: true,
+        default: 0,
+    },
 });
 
 export const UserModel = model<IUser>("User", userSchema);

@@ -1,10 +1,3 @@
-// * Planing_consumption
-
-// user_id:
-// time: 
-// number_of_members:
-// number_of_days:
-
 import { Schema, model, Types } from "mongoose";
 
 export interface IPlaningConsumption {
