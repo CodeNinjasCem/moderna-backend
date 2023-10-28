@@ -6,9 +6,8 @@ export const UserRoles = {
 };
 
 
-export interface Product{
+export interface IProduct{
   name: string;
-  energetic_content: number;
   calories: number;
   price: number;
   proteins: number;
@@ -16,13 +15,9 @@ export interface Product{
   portions_per_container: number;
 }
 
-export const productSchema = new Schema<Product>({
+export const productSchema = new Schema<IProduct>({
   name: {
     type: String,
-    required: true,
-  },
-  energetic_content: {
-    type: Number,
     required: true,
   },
   calories: {
@@ -47,5 +42,5 @@ export const productSchema = new Schema<Product>({
   },
 });
 
-export const ProductModel = model<Product>("Product", productSchema);
-export default Product;
+export const ProductModel = model<IProduct>("Product", productSchema);
+export default IProduct;
