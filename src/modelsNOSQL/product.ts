@@ -5,7 +5,6 @@ export const UserRoles = {
     USER: "user",
 };
 
-
 export interface IProduct{
   name: string;
   calories: number;
@@ -13,6 +12,7 @@ export interface IProduct{
   proteins: number;
   total_fat: number;
   portions_per_container: number;
+  img_link: string; 
 }
 
 export const productSchema = new Schema<IProduct>({
@@ -38,6 +38,10 @@ export const productSchema = new Schema<IProduct>({
   },
   portions_per_container: {
     type: Number,
+    required: true,
+  },
+  img_link: {
+    type: String,
     required: true,
   },
 });

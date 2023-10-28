@@ -6,11 +6,13 @@ import AuthenticationController from "./controllers/AuthenticationController";
 import ProductController from "./controllers/ProductController";
 import AnalyticsController from "./controllers/AnalyticsController";
 import RecipeController from "./controllers/RecipeController";
+import ChatGptController from "./controllers/ChatGptController";
 
 const servidor = new Server({
     port: 8080,
     middlewares: [express.json(), express.urlencoded({ extended: true }), cors()],
     controllers: [
+        ChatGptController.getInstance(),
         AuthenticationController.getInstance(),
         ProductController.getInstance(),
         AnalyticsController.getInstance(),
