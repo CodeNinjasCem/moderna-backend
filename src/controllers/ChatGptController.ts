@@ -4,6 +4,7 @@ import IUser, { UserModel } from "../modelsNOSQL/userMongo";
 import { Model, HydratedDocument } from "mongoose";
 import OpenAI from "openai";
 import IRecipe, { RecipeModel } from "../modelsNOSQL/Recipe";
+import IProduct, { ProductModel } from "../modelsNOSQL/product";
 
 class ChatGptController extends AbstractController {
     protected validateBody(type: any) {
@@ -25,13 +26,13 @@ class ChatGptController extends AbstractController {
 
     protected initRoutes(): void {
         this.router.post("/autocomplete", this.autocomplete.bind(this));
-        this.router.post("/createRecipe", this.createRecipe.bind(this));
+        this.router.get("/createRecipe/:product_id", this.createRecipe.bind(this));
     }
 
     private async callModel(prompt: string): Promise<any> {
         const response = await this._openai.chat.completions.create({
             messages: [{ role: "system", content: prompt }],
-            model: "gpt-3.5-turbo"
+            model: "gpt-3.5-turbo-0301"
         });
         return response;
     }
@@ -88,8 +89,14 @@ class ChatGptController extends AbstractController {
 
     private async createRecipe(req: Request, res: Response) {
         try {
-            const { product_id } = req.body;
-            const recipePrompt: string = this.getRecipePrompt(product_name);
+            const product_id = req.params.product_id;
+            const product: HydratedDocument<IProduct> | null = await
+                ProductModel.findById(product_id);
+            if (!product) {
+                throw "Product does not exist";
+            }
+
+            const recipePrompt: string = this.getRecipePrompt(product.name);
             const responseRecipe = await this.callModel(recipePrompt);
 
             const recipeText: string = this.extractTextFromModelResponse(responseRecipe);
@@ -100,7 +107,7 @@ class ChatGptController extends AbstractController {
 
             const recipe: HydratedDocument<IRecipe> | null = await this._mongoModel.create(
                 new RecipeModel({
-                    product: product_name,
+                    product_id: product._id,
                     ingredients: metadata.ingredients,
                     recipe_name: metadata.title,
                     recipe_text: recipeText,

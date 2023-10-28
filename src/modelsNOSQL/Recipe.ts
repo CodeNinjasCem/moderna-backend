@@ -8,7 +8,7 @@ export interface IRecipe {
     recipe_text: string;
     total_calories: number;
     total_protein: number;
-    total_portion: number;
+    total_portions: number;
     total_fat: number;
     avg_cost: number;
 }
@@ -21,7 +21,7 @@ export const recipeSchema = new Schema<IRecipe>({
     recipe_text: { type: String, required: true },
     total_calories: { type: Number, required: true },
     total_protein: { type: Number, required: true },
-    total_portion: { type: Number, required: true },
+    total_portions: { type: Number, required: true },
     total_fat: { type: Number, required: true },
     avg_cost: { type: Number, required: true },
 });
