@@ -19,6 +19,7 @@ class RecipeController extends AbstractController {
     protected initRoutes(): void {
         this.router.get("/recommended/:name", this.getRecommendedRecipes.bind(this));
         this.router.get("/popular", this.getPopularRecipe.bind(this));
+        this.router.post("/weeklyPlan", this.getWeeklyPlan.bind(this));
     }
     private async getRecommendedRecipes(req: Request, res: Response): Promise<void>{
         try {
@@ -174,6 +175,44 @@ class RecipeController extends AbstractController {
         }
 
 
+    }
+
+    private async getWeeklyPlan(req: Request, res: Response): Promise<void> {
+      try {
+        let days = req.body.days;
+        let product_name = req.body.product;
+        let product = await ProductModel.find({"name": product_name});
+        let product_id = product[0]._id;
+        let recipes = await RecipeModel.aggregate([
+                {
+                  $match:
+                    /**
+                     * query: The query in MQL.
+                     */
+                    {
+                      product_id: product_id 
+                    },
+                },
+                {
+                  $limit:
+                    /**
+                     * Provide the number of documents to limit.
+                     */
+                    days,
+                },
+            ]);
+      
+      res.status(200).send({
+        status: "Success",
+        data: recipes
+      })
+
+      }catch(errorMessage){
+        res.status(400).send({
+          status: "Failed",
+          message: errorMessage
+        })
+      }
     }
 }
 
