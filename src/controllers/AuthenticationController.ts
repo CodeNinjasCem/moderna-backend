@@ -50,7 +50,16 @@ class AuthenticationController extends AbstractController {
         const { email, password } = req.body;
         try {
             const login = await this.cognitoService.signInUser(email, password);
-            res.status(200).send({ ...login.AuthenticationResult });
+
+            const user: HydratedDocument<IUser> | null = await UserModel.findOne({
+                email: email,
+            });
+
+            if (!user) {
+                throw "Failed to find user";
+            }
+
+            res.status(200).send({ user: user });
         } catch (error: any) {
             res.status(500).send({ code: error.code, message: error.message });
         }
