@@ -87,6 +87,14 @@ class AuthenticationController extends AbstractController {
     private async signup(req: Request, res: Response) {
         const { email, password, first_name, last_name, gender, role } = req.body;
         try {
+            const userMongo: HydratedDocument<IUser> | null = await UserModel.findOne({
+                email: email,
+            });
+
+            if (userMongo) {
+                throw "Email already registered";
+            }
+
             // Crear el usuario de cognito
             const user = await this.cognitoService.signUpUser(email, password, [
                 {
