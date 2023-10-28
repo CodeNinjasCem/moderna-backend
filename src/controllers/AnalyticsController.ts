@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
 import AbstractController from "./AbstractController";
-import { Model, HydratedDocument } from "mongoose";
-import { ProductModel } from "../modelsNOSQL/product";
 import { RecipeModel } from "../modelsNOSQL/Recipe";
 
 class AnalyticsController extends AbstractController {
@@ -191,7 +189,7 @@ class AnalyticsController extends AbstractController {
 
         }catch(errorMessage){
             res.status(400).send({
-                status: "Fail askjfkasd",
+                status: "Fail",
                 message: errorMessage
             });
         }
