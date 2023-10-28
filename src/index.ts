@@ -4,6 +4,7 @@ import Server from "./providers/Server";
 import { MONGODB_URI } from "./config";
 import AuthenticationController from "./controllers/AuthenticationController";
 import ProductController from "./controllers/ProductController";
+import AnalyticsController from "./controllers/AnalyticsController";
 
 const servidor = new Server({
     port: 8080,
@@ -11,6 +12,7 @@ const servidor = new Server({
     controllers: [
         AuthenticationController.getInstance(),
         ProductController.getInstance(),
+        AnalyticsController.getInstance(),
     ],
     env: "development",
     mongoUri: MONGODB_URI,
