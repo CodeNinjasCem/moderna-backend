@@ -7,6 +7,7 @@ import ProductController from "./controllers/ProductController";
 import AnalyticsController from "./controllers/AnalyticsController";
 import RecipeController from "./controllers/RecipeController";
 import ChatGptController from "./controllers/ChatGptController";
+import UserController from "./controllers/UserController";
 
 const servidor = new Server({
     port: 8080,
@@ -16,7 +17,8 @@ const servidor = new Server({
         AuthenticationController.getInstance(),
         ProductController.getInstance(),
         AnalyticsController.getInstance(),
-        RecipeController.getInstance()
+        RecipeController.getInstance(),
+        UserController.getInstance(),
     ],
     env: "development",
     mongoUri: MONGODB_URI,
